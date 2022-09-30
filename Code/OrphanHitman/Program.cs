@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace OrphanHitman
 {
@@ -13,7 +14,7 @@ namespace OrphanHitman
 
         public static Dictionary<string, string> UserArgs = new Dictionary<string, string>(); // User args (excludes 1st which is the path) as key/value pairs
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
@@ -27,11 +28,11 @@ namespace OrphanHitman
                 else
                     childPids = new List<int>() { UserArgs["child-pid"].GetInt() };
 
-                Task.Run(() => MainLoop(parentPid, childPids));
+                await MainLoop(parentPid, childPids);
             }
             catch(Exception ex)
             {
-                ErrorClose(ex, 5);
+                ErrorClose(ex);
             }
         }
 
@@ -51,17 +52,50 @@ namespace OrphanHitman
 
         static async Task MainLoop (int parentPid, List<int> childPids)
         {
+            Console.WriteLine("Main loop start");
 
+            try
+            {
+                Process parent = Process.GetProcessById(parentPid);
+                List<Process> children = childPids.Select(pid => Process.GetProcessById(pid)).ToList();
+
+                while (parent != null && !parent.HasExited)
+                {
+                    await Task.Delay(1000);
+                }
+
+                foreach (Process child in children)
+                {
+                    if (child == null || child.HasExited)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        Console.WriteLine($"Killing child with PID {child.Id}");
+                        OsUtils.KillProcessTree(child.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to kill child with PID {child.Id}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorClose(ex);
+            }
+
+
+            Console.WriteLine("We're done here.");
+            await Task.Delay(1000);
         }
 
-        static async Task ErrorClose(Exception ex, int waitSeconds)
+        static void ErrorClose(Exception ex)
         {
-            Console.WriteLine($"An error occured. Program will close in {waitSeconds} seconds.\n");
+            Console.WriteLine($"An error occured.");
             Console.WriteLine($"Exception: {ex.Message}\nStack Trace:\n{ex.StackTrace}");
-
-            await Task.Delay(waitSeconds * 1000);
-
-            Environment.Exit(0);
         }
     }
 }
