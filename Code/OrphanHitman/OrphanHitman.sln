@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrphanHitman", "OrphanHitman.csproj", "{8AE18198-C0EB-4EF9-99D1-E67F4C6BC670}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AE18198-C0EB-4EF9-99D1-E67F4C6BC670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AE18198-C0EB-4EF9-99D1-E67F4C6BC670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AE18198-C0EB-4EF9-99D1-E67F4C6BC670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AE18198-C0EB-4EF9-99D1-E67F4C6BC670}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27AA8794-7A86-45CA-B740-90A0817F3E59}
+	EndGlobalSection
+EndGlobal
